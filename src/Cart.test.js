@@ -34,7 +34,7 @@ describe("when using the Cart Object", () => {
     // ARRANGE
     const cart = new Cart();
     const item = {
-      id: 1,
+      id: "1",
       name: "Test Product",
       price: 10.99,
       quantity: 1
@@ -53,7 +53,7 @@ describe("when using the Cart Object", () => {
     // ARRANGE
     const cart = new Cart();
     const item = {
-      id: 1,
+      id: "1",
       name: "Test Product",
       price: 10.99,
       quantity: 1
@@ -61,7 +61,7 @@ describe("when using the Cart Object", () => {
     cart.addItem(item);
 
     // ACT
-    cart.removeItem(1);
+    cart.removeItem("1");
     const cartItems = cart.getItems();
 
     // ASSERT
@@ -73,13 +73,13 @@ describe("when using the Cart Object", () => {
     // ARRANGE
     const cart = new Cart();
     const item1 = {
-      id: 1,
+      id: "1",
       name: "Product 1",
       price: 10.99,
       quantity: 2
     };
     const item2 = {
-      id: 2,
+      id: "2",
       name: "Product 2",
       price: 5.50,
       quantity: 1
@@ -100,7 +100,7 @@ describe("when using the Cart Object", () => {
     // ARRANGE
     const cart = new Cart();
     const item = {
-      id: 1,
+      id: "1",
       name: "Test Product",
       price: 10.99,
       quantity: 1
@@ -132,6 +132,106 @@ describe("when using the Cart Object", () => {
     const cart = new Cart();
 
     // ACT & ASSERT
-    expect(() => cart.removeItem(999)).not.toThrow();
+    expect(() => cart.removeItem("999")).not.toThrow();
     expect(cart.getTotalItems()).toBe(0);
   });
+
+  // Validation Tests for addItem
+  describe("addItem validation", () => {
+    it("should throw an error when the item passed to addItem is invalid (null)", () => {
+      // ARRANGE
+      const cart = new Cart();
+
+      // ACT & ASSERT
+      expect(() => cart.addItem(null)).toThrow("Invalid item: item cannot be null or undefined");
+    });
+
+    it("should throw an error when the item passed to addItem is invalid (undefined)", () => {
+      // ARRANGE
+      const cart = new Cart();
+
+      // ACT & ASSERT
+      expect(() => cart.addItem(undefined)).toThrow("Invalid item: item cannot be null or undefined");
+    });
+
+    it("should throw an error when the item passed to addItem is invalid (empty object)", () => {
+      // ARRANGE
+      const cart = new Cart();
+
+      // ACT & ASSERT
+      expect(() => cart.addItem({})).toThrow("Invalid item: missing required property 'id'");
+    });
+
+    it("should throw an error when the item passed to addItem is missing id", () => {
+      // ARRANGE
+      const cart = new Cart();
+      const invalidItem = {
+        name: "Test Product",
+        price: 10.99,
+        quantity: 1
+      };
+
+      // ACT & ASSERT
+      expect(() => cart.addItem(invalidItem)).toThrow("Invalid item: missing required property 'id'");
+    });
+
+    it("should throw an error when the item passed to addItem is missing name", () => {
+      // ARRANGE
+      const cart = new Cart();
+      const invalidItem = {
+        id: "1",
+        price: 10.99,
+        quantity: 1
+      };
+
+      // ACT & ASSERT
+      expect(() => cart.addItem(invalidItem)).toThrow("Invalid item: missing required property 'name'");
+    });
+
+    it("should throw an error when the item passed to addItem is missing price", () => {
+      // ARRANGE
+      const cart = new Cart();
+      const invalidItem = {
+        id: "1",
+        name: "Test Product",
+        quantity: 1
+      };
+
+      // ACT & ASSERT
+      expect(() => cart.addItem(invalidItem)).toThrow("Invalid item: missing required property 'price'");
+    });
+
+    it("should throw an error when the item passed to addItem is missing quantity", () => {
+      // ARRANGE
+      const cart = new Cart();
+      const invalidItem = {
+        id: "1",
+        name: "Test Product",
+        price: 10.99
+      };
+
+      // ACT & ASSERT
+      expect(() => cart.addItem(invalidItem)).toThrow("Invalid item: missing required property 'quantity'");
+    });
+  });
+
+  // Validation Tests for removeItem
+  describe("removeItem validation", () => {
+    it("should throw an error when the item id passed to removeItem is not a string", () => {
+      // ARRANGE
+      const cart = new Cart();
+
+      // ACT & ASSERT
+      expect(() => cart.removeItem(123)).toThrow("Invalid id: id must be a string");
+    });
+
+    it("should throw an error message 'Invalid id: id must be a string' when the item id passed to removeItem is not a string", () => {
+      // ARRANGE
+      const cart = new Cart();
+
+      // ACT & ASSERT
+      expect(() => cart.removeItem(123)).toThrow("Invalid id: id must be a string");
+    });
+  });
+});
+

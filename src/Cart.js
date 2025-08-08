@@ -12,6 +12,17 @@ class Cart {
   }
 
   addItem(newItem) {
+    // Validation
+    if (newItem === null || newItem === undefined) {
+      throw new Error("Invalid item: item cannot be null or undefined");
+    }
+
+    const requiredProperties = ['id', 'name', 'price', 'quantity'];
+    for (const prop of requiredProperties) {
+      if (!(prop in newItem)) {
+        throw new Error(`Invalid item: missing required property '${prop}'`);
+      }
+    }
 
     const existingItemIndex = this.items.findIndex(item => item.id === newItem.id);
     
@@ -25,6 +36,10 @@ class Cart {
   }
 
   removeItem(itemId) {
+    // Validation
+    if (typeof itemId !== 'string') {
+      throw new Error("Invalid id: id must be a string");
+    }
 
     this.items = this.items.filter(item => item.id !== itemId);
   }
